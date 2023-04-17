@@ -30,8 +30,11 @@ params = {
 }
 people = query_pco_api(people_endpoint, params)
 
-# Get field definitions
-field_defs = query_pco_api(field_defs_endpoint)
+# Get field definitions in the 'General' tab
+params = {
+    'where[tab]': 'General',
+}
+field_defs = query_pco_api(field_defs_endpoint, params)
 
 # Find the ID of the custom field 'Generation'
 generation_field_id = None
