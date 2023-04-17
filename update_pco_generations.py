@@ -23,23 +23,36 @@ def query_pco_api(endpoint, params=None):
     response.raise_for_status()
     return response.json()
 
-# Get people with a birthday today and a blank custom field
-params = {
-    'where[birthday]': datetime.now().strftime('%m-%d'),
-    'include': 'field_data',
-}
-people = query_pco_api(people_endpoint, params)
+# Function to retrieve all people with pagination
+def get_all_people():
+    params = {
+        'include': 'field_data',
+        'per_page': 100,
+        'page': 1,
+    }
+    all_people = []
 
-# Get field definitions in the 'General' tab
-params = {
-    'where[tab]': 'General',
-}
-field_defs = query_pco_api(field_defs_endpoint, params)
+    while True:
+        people_page = query_pco_api(people_endpoint, params)
+        all_people.extend(people_page['data'])
 
-# Find the ID of the custom field 'Generation'
+        if 'next' in people_page['links']:
+            params['page'] += 1
+        else:
+            break
+
+    return all_people
+
+# Get all people
+people = get_all_people()
+
+# Get field definitions
+field_defs = query_pco_api(field_defs_endpoint)
+
+# Find the ID of the custom field 'Generation' in the 'General' tab
 generation_field_id = None
 for field_def in field_defs['data']:
-    if field_def['attributes']['name'] == 'Generation':
+    if field_def['attributes']['name'] == 'Generation' and field_def['attributes']['tab'] == 'General':
         generation_field_id = field_def['id']
         break
 
@@ -62,7 +75,7 @@ def get_generation_name(birth_year):
         return "Generation Alpha"
 
 # Update the custom field for each person
-for person in people['data']:
+for person in people:
     person_id = person['id']
     birth_year = int(person['attributes']['birthdate'][:4])
     generation_name = get_generation_name(birth_year)
@@ -83,4 +96,4 @@ for person in people['data']:
             }
             response = requests.patch(update_url, auth=(app_id, app_secret), json=payload)
             response.raise_for_status()
-            print(f"Updated generation for person {person_id} to {generation_name}")
+            print(f"
