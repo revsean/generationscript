@@ -3,8 +3,8 @@ import requests
 from datetime import datetime
 
 # Replace with your PCO API credentials
-app_id = os.environ[dd5393328c2bb9abfaaec29a6028a54440b853eb83d058599a269304074dded0]
-app_secret = os.environ[690aa3371090c4fb8032d9d0a781603bf8c3010da65d60fdd1196640cdc2c595]
+app_id = os.environ['PCO_APP_ID']
+app_secret = os.environ['PCO_APP_SECRET']
 
 # Set the API endpoints
 base_url = 'https://api.planningcenteronline.com/people/v2'
