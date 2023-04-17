@@ -96,4 +96,5 @@ for person in people:
             }
             response = requests.patch(update_url, auth=(app_id, app_secret), json=payload)
             response.raise_for_status()
-            print(f"
+                       print(f"Updated generation for person {person_id} to {generation_name}")
+
