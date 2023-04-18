@@ -74,26 +74,28 @@ def get_generation_name(birth_year):
     else:
         return "Generation Alpha"
 
-# Update the custom field for each person
+# Prepare the batch update payload
+update_payload = {
+    'data': [],
+}
+
 for person in people:
     person_id = person['id']
     birth_year = int(person['attributes']['birthdate'][:4])
     generation_name = get_generation_name(birth_year)
 
-    # Check if the custom field is blank
     field_data = person['relationships']['field_data']['data']
     for field in field_data:
         if field['relationships']['field_definition']['data']['id'] == generation_field_id and not field['attributes']['value']:
-            # Update the custom field
-            update_url = f"{field_data_endpoint(person_id)}/{field['id']}"
-            payload = {
-                'data': {
-                    'type': 'FieldDatum',
-                    'attributes': {
-                        'value': generation_name
-                    }
+            update_payload['data'].append({
+                'id': field['id'],
+                'type': 'FieldDatum',
+                'attributes': {
+                    'value': generation_name
                 }
-            }
-            response = requests.patch(update_url, auth=(app_id, app_secret), json=payload)
-            response.raise_for_status()
-            print(f"Updated generation for person {person_id} to {generation_name}")
+            })
+
+            if len(update_payload['data']) == 50:
+                response = requests.patch(people_endpoint, auth=(app_id, app_secret), json=update_payload)
+                response.raise_for_status()
+                print(f
