@@ -98,4 +98,20 @@ for person in people:
             if len(update_payload['data']) == 50:
                 response = requests.patch(people_endpoint, auth=(app_id, app_secret), json=update_payload)
                 response.raise_for_status()
-                print(f
+                print(f"Updated generations for {len(update_payload['data'])} people")
+                update_payload['data'] = []
+
+# Update the remaining people in the batch if any
+if update_payload['data']:
+    response = requests.patch(people_endpoint, auth=(app_id, app_secret), json=update_payload)
+    response.raise_for_status()
+    print(f"Updated generations for {len(update_payload['data'])} people")
+
+
+                      
+                      
+                      
+                      
+                      
+                      
+                      
