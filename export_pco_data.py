@@ -83,7 +83,14 @@ def export_to_csv(data, filename):
         for row in data:
             writer.writerow(row)
 
+    # Ensure the file exists and has content
+    if not os.path.exists(filename) or os.path.getsize(filename) == 0:
+        print(f"File {filename} not found or is empty. Creating an empty file.")
+        with open(filename, "w", newline="", encoding="utf-8") as csvfile:
+            csvfile.write("")
+
     print(f"Data exported to {filename}")
+
 
 def main():
     data = get_pco_data()
