@@ -18,14 +18,7 @@ def get_pco_data():
     # Get groups
     groups_url = f"{API_BASE_URL}groups/v2/groups"
     groups_response = requests.get(groups_url, headers=headers)
-    
-    if groups_response.status_code != 200:
-        print(f"Error getting groups: {groups_response.status_code}, {groups_response.text}")
-        return []
-    
-    groups = groups_response.json()["data"]
-    # ... (rest of the code)
-
+    print(f"Groups response: {groups_response.status_code}, {groups_response.text}")
 # (rest of the script remains the same)
     
     groups = groups_response.json()["data"]
