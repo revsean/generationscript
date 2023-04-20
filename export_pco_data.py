@@ -31,6 +31,8 @@ def get_pco_data():
         # Get group leaders
         leaders_url = f"{API_BASE_URL}{ORGANIZATION}/groups/v2/groups/{group_id}/leaders"
         leaders_response = requests.get(leaders_url, headers=headers)
+        print(f"Leaders response for group {group_id}: {leaders_response.status_code}, {leaders_response.text}")
+
         
         if leaders_response.status_code != 200:
             print(f"Error getting group leaders: {leaders_response.status_code}, {leaders_response.text}")
@@ -46,7 +48,8 @@ def get_pco_data():
             # Get the number of people in the group
             members_url = f"{API_BASE_URL}{ORGANIZATION}/groups/v2/groups/{group_id}/memberships"
             members_response = requests.get(members_url, headers=headers)
-            
+            print(f"Members response for group {group_id}: {members_response.status_code}, {members_response.text}")
+
             if members_response.status_code != 200:
                 print(f"Error getting group members: {members_response.status_code}, {members_response.text}")
                 continue
