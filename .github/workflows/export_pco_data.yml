@@ -29,3 +29,19 @@ jobs:
       with:
         name: pco_data
         path: pco_data.csv
+        
+  - name: Run Python script
+  id: run_script
+  run: |
+    OUTPUT=$(python export_pco_data.py)
+    echo "CSV_PATH=$OUTPUT" >> $GITHUB_ENV
+
+- name: List files in the current directory
+  run: ls -la
+
+- name: Upload artifact
+  uses: actions/upload-artifact@v2
+  with:
+    name: pco_data
+    path: ${{ env.CSV_PATH }}
+
