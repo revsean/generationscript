@@ -1,24 +1,32 @@
 import requests
 import pandas as pd
+import base64
 
 API_BASE_URL = "https://api.planningcenteronline.com/"
 APP_ID = "YOUR_APP_ID"
 SECRET = "YOUR_SECRET"
-ORGANIZATION = "O228371"
 
 def get_pco_data():
+    auth_string = f"{APP_ID}:{SECRET}"
+    auth_encoded = base64.b64encode(auth_string.encode("utf-8")).decode("utf-8")
+
     headers = {
-        "Authorization": f"Basic {APP_ID}:{SECRET}",
+        "Authorization": f"Basic {auth_encoded}",
         "Content-Type": "application/json",
     }
     
     # Get groups
-    groups_url = f"{API_BASE_URL}{ORGANIZATION}/groups/v2/groups"
+    groups_url = f"{API_BASE_URL}groups/v2/groups"
     groups_response = requests.get(groups_url, headers=headers)
     
     if groups_response.status_code != 200:
         print(f"Error getting groups: {groups_response.status_code}, {groups_response.text}")
         return []
+    
+    groups = groups_response.json()["data"]
+    # ... (rest of the code)
+
+# (rest of the script remains the same)
     
     groups = groups_response.json()["data"]
     group_data = []
