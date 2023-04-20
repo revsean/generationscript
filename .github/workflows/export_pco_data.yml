@@ -1,0 +1,31 @@
+name: Export PCO Data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  export-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests pandas
+
+    - name: Run the script
+      run: python export_pco_data.py
+
+    - name: Upload CSV file
+      uses: actions/upload-artifact@v2
+      with:
+        name: pco-data
+        path: pco_data.csv
