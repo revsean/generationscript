@@ -4,7 +4,7 @@ import pandas as pd
 API_BASE_URL = "https://api.planningcenteronline.com/"
 APP_ID = "YOUR_APP_ID"
 SECRET = "YOUR_SECRET"
-ORGANIZATION = "O228371"
+ORGANIZATION = "YOUR_ORGANIZATION"
 
 def get_pco_data():
     headers = {
@@ -14,9 +14,13 @@ def get_pco_data():
     
     # Get groups
     groups_url = f"{API_BASE_URL}{ORGANIZATION}/groups/v2/groups"
-    groups_response = requests.get(groups_url, headers=headers).json()
-    groups = groups_response["data"]
-
+    groups_response = requests.get(groups_url, headers=headers)
+    
+    if groups_response.status_code != 200:
+        print(f"Error getting groups: {groups_response.status_code}, {groups_response.text}")
+        return []
+    
+    groups = groups_response.json()["data"]
     group_data = []
 
     for group in groups:
@@ -25,8 +29,13 @@ def get_pco_data():
 
         # Get group leaders
         leaders_url = f"{API_BASE_URL}{ORGANIZATION}/groups/v2/groups/{group_id}/leaders"
-        leaders_response = requests.get(leaders_url, headers=headers).json()
-        leaders = leaders_response["data"]
+        leaders_response = requests.get(leaders_url, headers=headers)
+        
+        if leaders_response.status_code != 200:
+            print(f"Error getting group leaders: {leaders_response.status_code}, {leaders_response.text}")
+            continue
+        
+        leaders = leaders_response.json()["data"]
 
         for leader in leaders:
             leader_id = leader["id"]
@@ -35,8 +44,13 @@ def get_pco_data():
 
             # Get the number of people in the group
             members_url = f"{API_BASE_URL}{ORGANIZATION}/groups/v2/groups/{group_id}/memberships"
-            members_response = requests.get(members_url, headers=headers).json()
-            member_count = len(members_response["data"])
+            members_response = requests.get(members_url, headers=headers)
+            
+            if members_response.status_code != 200:
+                print(f"Error getting group members: {members_response.status_code}, {members_response.text}")
+                continue
+            
+            member_count = len(members_response.json()["data"])
 
             group_data.append({
                 "Group Name": group_name,
