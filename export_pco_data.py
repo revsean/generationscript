@@ -96,6 +96,7 @@ def main():
     data = get_pco_data()
     csv_file_path = os.path.join(os.getcwd(), "pco_data.csv")
     export_to_csv(data, csv_file_path)
+    print(f"CSV file generated at: {csv_file_path}")
 
 if __name__ == "__main__":
     main()
