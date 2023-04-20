@@ -4,7 +4,7 @@ import pandas as pd
 API_BASE_URL = "https://api.planningcenteronline.com/"
 APP_ID = "YOUR_APP_ID"
 SECRET = "YOUR_SECRET"
-ORGANIZATION = "YOUR_ORGANIZATION"
+ORGANIZATION = "O228371"
 
 def get_pco_data():
     headers = {
