@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import base64
 import csv
+import os
 
 API_BASE_URL = "https://api.planningcenteronline.com/"
 APP_ID = "YOUR_APP_ID"
@@ -86,7 +87,8 @@ def export_to_csv(data, filename):
 
 def main():
     data = get_pco_data()
-    export_to_csv(data, "pco_data.csv")
+    csv_file_path = os.path.join(os.getcwd(), "pco_data.csv")
+    export_to_csv(data, csv_file_path)
 
 if __name__ == "__main__":
     main()
