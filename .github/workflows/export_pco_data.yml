@@ -24,8 +24,8 @@ jobs:
     - name: Run the script
       run: python export_pco_data.py
 
-    - name: Upload CSV file
+    - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: pco-data
+        name: pco_data
         path: pco_data.csv
